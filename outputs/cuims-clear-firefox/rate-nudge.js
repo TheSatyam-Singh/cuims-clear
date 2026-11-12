@@ -11,19 +11,8 @@
   // How long the top banner stays before it moves to the bottom strip.
   const TOP_MS = 8000;
 
-  const STORES = {
-    chrome: {
-      name: "Chrome Web Store",
-      url: "https://chromewebstore.google.com/detail/amlobigbjldbogimakmfndkdaekcdbkf/reviews",
-    },
-    firefox: {
-      name: "Firefox Add-ons",
-      url: "https://addons.mozilla.org/firefox/addon/cuims-clear/",
-    },
-  };
-
-  function store(protocol) {
-    return protocol === "moz-extension:" ? STORES.firefox : STORES.chrome;
+  function store() {
+    return null;
   }
 
   function normalize(state) {
@@ -74,5 +63,5 @@
     return s;
   }
 
-  globalThis.CuimsRate = { step, opened, rated, notYet, snooze, store, STORES, SNOOZE_MS, MAX_SNOOZES, TOP_MS };
+  globalThis.CuimsRate = { step, opened, rated, notYet, snooze, store, SNOOZE_MS, MAX_SNOOZES, TOP_MS };
 })();

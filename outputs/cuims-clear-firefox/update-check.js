@@ -24,8 +24,6 @@
   // The What's new card, after an update, until Got it or this long.
   const NEWS_MS = 3 * 24 * HOUR_MS;
 
-  const AMO_API = "https://addons.mozilla.org/api/v5/addons/addon/cuims-clear/";
-  const AMO_XPI = "https://addons.mozilla.org/firefox/downloads/latest/cuims-clear/latest.xpi";
   // Opened by the popup's Update now on Firefox, which first clears the
   // bar's ×. (A #hash would not survive CUIMS's redirect to its login page.)
   const UPDATE_PAGE = "https://students.cuchd.in/StudentHome.aspx";
@@ -95,14 +93,6 @@
   }
 
   // AMO's answer: the listed version, if this Firefox can run it.
-  function amoLatest(json, browserVersion) {
-    const version = json?.current_version;
-    if (!version?.version) return "";
-    const min = version.compatibility?.firefox?.min;
-    if (min && browserVersion && newer(min, browserVersion)) return "";
-    return String(version.version);
-  }
-
   // updateDone in storage: { from, to, at, seen }, set when an update lands.
   function news(done, current, now) {
     if (!done || typeof done !== "object" || done.seen || done.to !== current) return null;
@@ -128,12 +118,9 @@
     normalize,
     due,
     available,
-    amoLatest,
     news,
     ago,
     NOTES,
-    AMO_API,
-    AMO_XPI,
     UPDATE_PAGE,
     CHECK_EVERY_MS,
     MANUAL_GAP_MS,

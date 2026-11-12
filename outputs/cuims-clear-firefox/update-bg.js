@@ -1,7 +1,7 @@
 // Finds out when the store has a newer CUIMS Clear, marks the toolbar icon,
 // and on Chrome installs it when the student asks. It never talks to CUIMS:
-// Chrome asks the Web Store itself, Firefox asks addons.mozilla.org for one
-// version number. See update-check.js for why each browser differs.
+// Browsers check for add-on updates on their own; this build does not
+// contact any external update API. See update-check.js.
 // Nothing here may throw while loading: in Chrome's service worker one
 // failing script stops every other one.
 (function () {
@@ -50,12 +50,9 @@ function startUpdates() {
     return { status: String(result?.status || result || ""), version: String(result?.version || "") };
   }
 
-  async function askAmo() {
-    const response = await fetch(U.AMO_API, { credentials: "omit", cache: "no-cache" });
-    if (!response.ok) throw new Error(`addons.mozilla.org answered ${response.status}`);
-    const json = await response.json();
-    const browser = await globalThis.browser?.runtime?.getBrowserInfo?.().catch(() => null);
-    return U.amoLatest(json, browser?.version);
+  async function askChrome() {
+    const result = await chrome.runtime.requestUpdateCheck();
+    return { status: String(result?.status || result || ""), version: String(result?.version || "") };
   }
 
   function check({ manual = false } = {}) {
@@ -67,7 +64,8 @@ function startUpdates() {
       const next = { ...info, checkedAt: now, error: "" };
       try {
         if (firefox) {
-          next.latest = await askAmo();
+          // No external update check: only cuchd.in is contacted.
+          next.latest = "";
         } else {
           const answer = await askChrome();
           if (answer.status === "update_available") next.latest = answer.version || info.latest;

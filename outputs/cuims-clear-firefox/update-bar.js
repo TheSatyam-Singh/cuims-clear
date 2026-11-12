@@ -57,15 +57,11 @@
     title.textContent = `CUIMS Clear ${info.latest} is out`;
 
     if (firefox) {
-      const link = document.createElement("a");
-      link.className = "update";
-      link.href = U.AMO_XPI;
-      link.textContent = "Update";
-      link.addEventListener("click", () => {
-        note.textContent = "In Firefox's prompts choose Allow, then Add.";
-      });
-      row.append(link);
-      note.textContent = "Firefox asks twice: Allow, then Add. Your saved login and attendance stay.";
+      // No external update URL: only cuchd.in is contacted.
+      const notice = document.createElement("span");
+      notice.textContent = "Update available.";
+      row.append(notice);
+      note.textContent = "Your saved login and attendance stay.";
     } else {
       const button = document.createElement("button");
       button.type = "button";

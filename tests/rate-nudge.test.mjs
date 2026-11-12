@@ -63,15 +63,15 @@ test("bad stored values are treated as a fresh start", () => {
   assert.equal(state.done, false);
 });
 
-test("each build links to its own store's review page", () => {
-  assert.equal(R.store("moz-extension:").url, "https://addons.mozilla.org/firefox/addon/cuims-clear/");
-  assert.equal(R.store("chrome-extension:").url, "https://chromewebstore.google.com/detail/amlobigbjldbogimakmfndkdaekcdbkf/reviews");
+test("no external store links: store() returns null", () => {
+  assert.equal(R.store("moz-extension:"), null);
+  assert.equal(R.store("chrome-extension:"), null);
   for (const browser of ["firefox", "chrome"]) {
     assert.equal(read(browser, "rate-nudge.js"), read("firefox", "rate-nudge.js"), `${browser} ships the same rate-nudge.js`);
     const html = read(browser, "popup.html");
     assert.ok(html.indexOf('src="rate-nudge.js"') < html.indexOf('src="popup.js"'), "loaded before popup.js");
     assert.ok(html.includes('id="rate-nudge"') && html.includes("hidden>"), "the strip starts hidden");
-    assert.ok(html.includes('class="rate-line"'), "Settings always has a rate link");
+    assert.ok(html.includes('class="rate-line"'), "Settings always has a rate line");
   }
 });
 
@@ -147,8 +147,8 @@ test("popup: the day's first ask sits at the top, the strip is only on Attendanc
   assert.equal(strip.hidden, false);
   assert.equal(strip.classList.contains("is-top"), true);
   assert.equal(p.moves.at(-1), "before");
-  assert.equal(p.links[0].href, "https://addons.mozilla.org/firefox/addon/cuims-clear/");
-  assert.equal(p.names[0].textContent, "Firefox Add-ons");
+  assert.equal(p.links[0].href, "", "no external store URL set");
+  assert.equal(p.names[0].textContent, "", "no external store name set");
 
   p.timers.at(-1)();
   assert.equal(strip.classList.contains("is-top"), false, "the timer moves it down");

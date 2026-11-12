@@ -46,14 +46,6 @@ test("only a newer store version is an update", () => {
   assert.equal(U.available(null, "0.10.6"), false);
 });
 
-test("AMO's version counts only when this Firefox can run it", () => {
-  const json = { current_version: { version: "0.10.7", compatibility: { firefox: { min: "142.0", max: "*" } } } };
-  assert.equal(U.amoLatest(json, "157.0.1"), "0.10.7");
-  assert.equal(U.amoLatest(json, "140.0"), "", "too old a Firefox: no notice it cannot act on");
-  assert.equal(U.amoLatest(json, undefined), "0.10.7");
-  assert.equal(U.amoLatest({}, "157.0"), "");
-});
-
 test("What's new shows once after an update, until Got it or three days", () => {
   const at = Date.UTC(2026, 9, 14, 6);
   const done = { from: "0.10.5", to: "0.10.6", at, seen: false };
@@ -152,50 +144,37 @@ function loadBackground(build, { amo, chromeAnswers = [], store: seed = {} } = {
   return { store, listeners, fetched, badge, send, clock, reloads: () => reloads, reloadedAt: () => reloadedAt, asked: () => asked };
 }
 
-const AMO = (version) => ({ current_version: { version, compatibility: { firefox: { min: "142.0", max: "*" } } } });
-
-test("Firefox asks addons.mozilla.org, marks the icon, and asks again only after six hours", async () => {
-  const bg = loadBackground("firefox", { amo: AMO("0.10.7") });
+test("Firefox does not contact any external update API", async () => {
+  const bg = loadBackground("firefox");
   const first = await bg.send({ type: "cuims-clear:update-status", check: true });
-  assert.equal(first.available, true);
-  assert.equal(first.latest, "0.10.7");
+  assert.equal(first.available, false);
+  assert.equal(first.latest, "");
   assert.equal(first.browser, "firefox");
-  assert.equal(bg.fetched.length, 1);
-  assert.equal(bg.fetched[0].url, "https://addons.mozilla.org/api/v5/addons/addon/cuims-clear/");
-  assert.equal(bg.fetched[0].options.credentials, "omit", "no cookies go to AMO");
-  assert.equal(bg.badge.at(-1), "↑");
-  await bg.send({ type: "cuims-clear:update-status", check: true });
-  assert.equal(bg.fetched.length, 1, "within six hours: the saved answer");
-  bg.clock.now += 61_000;
-  await bg.send({ type: "cuims-clear:update-status", check: true, manual: true });
-  assert.equal(bg.fetched.length, 2, "Check now, a minute later, asks again");
-  assert.equal(bg.listeners.updateAvailable.length, 0, "Firefox would hold the update until a restart");
-});
-
-test("Firefox: an older AMO version, or AMO unreachable, is no update and no throw", async () => {
-  let bg = loadBackground("firefox", { amo: AMO("0.10.5") });
-  let answer = await bg.send({ type: "cuims-clear:update-status", check: true });
-  assert.equal(answer.available, false);
+  assert.equal(bg.fetched.length, 0, "no external fetch");
   assert.equal(bg.badge.at(-1), "");
-  bg = loadBackground("firefox", { amo: new Error("offline") });
-  answer = await bg.send({ type: "cuims-clear:update-status", check: true });
-  assert.equal(answer.available, false);
-  assert.match(answer.error, /offline/);
-  assert.ok(answer.checkedAt > 0, "a failed check still waits six hours, so it never hammers");
 });
 
-test("a CUIMS page load prompts a check, but other senders get nothing", async () => {
-  const bg = loadBackground("firefox", { amo: AMO("0.10.7") });
+test("Firefox update check returns no update and no error", async () => {
+  const bg = loadBackground("firefox");
+  const answer = await bg.send({ type: "cuims-clear:update-status", check: true });
+  assert.equal(answer.available, false);
+  assert.equal(answer.error, "");
+  assert.equal(bg.badge.at(-1), "");
+  assert.ok(answer.checkedAt > 0);
+});
+
+test("a CUIMS page load prompts a check but no external fetch", async () => {
+  const bg = loadBackground("firefox");
   await bg.send({ type: "cuims-clear:tab-page", path: "/StudentHome.aspx" }, { url: "https://students.cuchd.in/StudentHome.aspx" });
   for (let i = 0; i < 5; i += 1) await new Promise((resolve) => setImmediate(resolve));
-  assert.equal(bg.fetched.length, 1);
+  assert.equal(bg.fetched.length, 0, "only cuchd.in is contacted, nothing external");
   const stranger = await bg.send({ type: "cuims-clear:update-status", check: true }, { url: "https://example.com/" });
   assert.equal(stranger, undefined);
-  assert.equal(bg.fetched.length, 1);
+  assert.equal(bg.fetched.length, 0);
 });
 
 test("Firefox never installs from the background", async () => {
-  const bg = loadBackground("firefox", { amo: AMO("0.10.7") });
+  const bg = loadBackground("firefox");
   assert.deepEqual(plain(await bg.send({ type: "cuims-clear:update-apply" })), { status: "firefox" });
   assert.equal(bg.reloads(), 0);
 });

@@ -1033,10 +1033,12 @@ function setupRate(stored) {
   if (!rate || !rateNudge) return;
   const shop = rate.store(globalThis.location?.protocol);
   for (const link of document.querySelectorAll(".rate-link")) {
-    link.href = shop.url;
+    if (shop) link.href = shop.url;
     link.addEventListener("click", () => saveRate(rate.opened(rateState), rateState?.done ? "" : "confirm"));
   }
-  for (const name of document.querySelectorAll(".rate-store")) name.textContent = shop.name;
+  for (const name of document.querySelectorAll(".rate-store")) {
+    if (shop) name.textContent = shop.name;
+  }
   rateNudge.addEventListener("click", (event) => {
     const action = event.target.closest?.("[data-rate]")?.dataset.rate;
     if (action === "rated") {
