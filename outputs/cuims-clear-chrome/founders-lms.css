@@ -1,0 +1,99 @@
+/* ---- Founding 100 on the LMS clear view ----
+   lms-boot.js sets html:is([data-cc-signature="founders"], [data-cc-signature="black"]) while that theme is on.
+   The course directory reads like a ledger: torn lines between courses,
+   Courier codes, serif names, stamped links. */
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) {
+  --f-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --f-mono: "Courier New", Courier, "Nimbus Mono PS", monospace;
+  --f-red: #b4322a;
+  --f-foil: linear-gradient(100deg, #5e420c 0%, #8f6a1b 24%, #a17a22 38%, #7d5a14 56%, #9c721c 74%, #5e420c 100%);
+  --f-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32  0 0 0 0 .26  0 0 0 0 .16  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --f-ink-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) body.cc-lms::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  background-image: var(--f-grain);
+  mix-blend-mode: multiply;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-toolbar .cc-brand,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-directory h1 {
+  font-family: var(--f-serif);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: transparent;
+  background: var(--f-foil);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-directory h1 {
+  font-size: 32px;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-toolbar {
+  border-bottom: 2px dashed var(--cc-line);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) :is(#cc-toolbar button, #cc-toolbar a:not(.cc-brand), .cc-text-button, #cc-directory .cc-count, #cc-directory .cc-columns, #cc-directory label, .cc-lms .cc-code, body.cc-lms .format_onetopic-tabs .nav-link, body.cc-lms .cc-course-nav) {
+  font-family: var(--f-mono);
+  font-weight: 700;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-directory .cc-columns {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 2px dashed var(--cc-line);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-directory .cc-course-row {
+  border-bottom: 2px dashed var(--cc-line);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) :is(#cc-directory h2, body.cc-lms #page-header h1, body.cc-lms .page-header-headings h1) {
+  font-family: var(--f-serif) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Links to a course's materials and work are stamped on. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-lms .cc-course-link {
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  font-family: var(--f-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transform: rotate(-1deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-lms .cc-course-link:nth-of-type(even) {
+  transform: rotate(1deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) body.cc-lms .activity-item {
+  border-radius: 3px !important;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #cc-directory input {
+  border-radius: 3px;
+  font-family: var(--f-mono);
+}
+
+/* ---- Black Card on the LMS ---- */
+
+html[data-cc-signature="black"] {
+  --f-red: #e8664f;
+  --f-foil: linear-gradient(100deg, #b98c2e 0%, #f1d27c 28%, #c99a3a 50%, #f3d98a 72%, #b48628 100%);
+  --f-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95  0 0 0 0 .9  0 0 0 0 .8  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+html[data-cc-signature="black"] body.cc-lms::after {
+  mix-blend-mode: screen;
+}

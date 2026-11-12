@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CUIMS Clear</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="celebrate.css" />
+    <link rel="stylesheet" href="founders.css" />
+    <!-- Theme before first paint: a synchronous copy, corrected from storage. -->
+    <script src="themes.js"></script>
+    <script src="theme-boot.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <nav class="rail" aria-label="CUIMS Clear">
+        <div class="mark" aria-hidden="true"><span>//</span></div>
+        <div class="rail-tabs" role="tablist" aria-label="Sections" aria-orientation="vertical">
+          <button id="tab-attendance" type="button" role="tab" aria-selected="false" aria-controls="view-attendance" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="13" rx="2.5" /><path d="M3 8h14M7 2.5v3M13 2.5v3M7.5 12.5l1.8 1.8 3.4-3.6" /></svg>
+            <span>Attendance</span>
+          </button>
+          <button id="tab-forecast" type="button" role="tab" aria-selected="false" aria-controls="view-forecast" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 15.5l3.6-4 2.8 2.2 3.4-4.7" /><path d="M12.8 9l3.9-5.2" class="dash" /><circle cx="16.7" cy="3.8" r="1.2" class="fill" /></svg>
+            <span>Forecast</span>
+          </button>
+          <button id="tab-marks" type="button" role="tab" aria-selected="false" aria-controls="view-marks" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="2.5" width="12" height="15" rx="2.5" /><path d="M7.5 14v-2.5M10 14V8.5M12.5 14v-4.5" /></svg>
+            <span>Marks</span>
+          </button>
+          <button id="tab-login" type="button" role="tab" aria-selected="false" aria-controls="view-login" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="7" cy="10" r="3.5" /><path d="M10.5 10H17.5M15 10v3M17.5 10v2.2" /></svg>
+            <span>Login</span>
+            <span class="rail-dot" id="login-dot" hidden><span class="sr-only">, not saved yet</span></span>
+          </button>
+          <button id="tab-theme" type="button" role="tab" aria-selected="false" aria-controls="view-theme" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" /><path d="M10 3a7 7 0 0 0 0 14z" class="fill" /></svg>
+            <span>Theme</span>
+          </button>
+          <button id="tab-settings" type="button" role="tab" aria-selected="false" aria-controls="view-settings" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h8M15 6h2M3 14h2M9 14h8" /><circle cx="13" cy="6" r="2" /><circle cx="7" cy="14" r="2" /></svg>
+            <span>Settings</span>
+          </button>
+          <button id="tab-club" type="button" role="tab" aria-selected="false" aria-controls="view-club" tabindex="-1">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="8.2" r="5.4" /><path d="M7.2 12.8 5.8 18l2.6-1.2L10 18.6M12.8 12.8l1.4 5.2-2.6-1.2L10 18.6" /><path d="M8.6 6.8 10.2 5.6v5.2" /></svg>
+            <span>1.0</span>
+            <span class="rail-dot" id="club-dot" hidden><span class="sr-only">, something new</span></span>
+          </button>
+        </div>
+        <span class="version" id="version"></span>
+      </nav>
+
+      <main class="pane">
+        <header class="pane-head">
+          <div class="product-name">
+            <p class="eyebrow">Student utility</p>
+            <h1>CUIMS Clear</h1>
+          </div>
+          <nav class="open-nav" aria-label="Open portals">
+            <a class="open-link cuims-open-link" href="https://students.cuchd.in/StudentHome.aspx" target="_blank" rel="noreferrer">
+              <span>Open CUIMS</span><span aria-hidden="true">↗</span>
+            </a>
+            <a class="open-link lms-open-link" href="https://students.cuchd.in/StudentHome.aspx#cuims-clear-lms" target="_blank" rel="noreferrer">
+              <span>Open LMS</span><span aria-hidden="true">↗</span>
+            </a>
+          </nav>
+        </header>
+
+        <div id="access-banner" class="access-banner" role="alert" hidden>
+          <p>Your browser has switched off CUIMS Clear on CUIMS and LMS, so it only runs when you click it.</p>
+          <button id="grant-access" type="button">Allow access</button>
+        </div>
+
+        <aside id="update-banner" class="update-banner" aria-label="Update CUIMS Clear" hidden>
+          <p><strong id="update-title"></strong> <span id="update-note"></span></p>
+          <button id="update-now" type="button">Update now</button>
+        </aside>
+
+        <aside id="update-news" class="update-news" aria-labelledby="update-news-title" hidden>
+          <div class="update-news-head">
+            <strong id="update-news-title"></strong>
+            <button id="update-news-done" type="button" class="text-button">Got it</button>
+          </div>
+          <ul id="update-news-list"></ul>
+          <button id="update-news-club" type="button" class="text-button" data-goto="club" hidden>Open the 1.0 page</button>
+        </aside>
+
+        <div class="views" id="views">
+          <section id="view-attendance" class="view attendance" role="tabpanel" aria-labelledby="tab-attendance" tabindex="-1" hidden></section>
+
+          <section id="view-forecast" class="view forecast" role="tabpanel" aria-labelledby="tab-forecast" tabindex="-1" hidden></section>
+          <section id="view-marks" class="view marks" role="tabpanel" aria-labelledby="tab-marks" tabindex="-1" hidden></section>
+          <section id="view-login" class="view" role="tabpanel" aria-labelledby="tab-login" tabindex="-1" hidden>
+            <form id="settings-form" class="login-form">
+              <fieldset class="login-fields">
+                <legend>Saved login</legend>
+
+                <label for="uid">Student UID</label>
+                <input
+                  id="uid"
+                  name="uid"
+                  type="text"
+                  autocomplete="username"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  maxlength="15"
+                  placeholder="e.g. 24BCS10000"
+                />
+
+                <label for="password">CUIMS password</label>
+                <div class="password-field">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autocomplete="off"
+                    aria-describedby="storage-note"
+                  />
+                  <button id="toggle-password" class="field-action" type="button" aria-label="Show password">
+                    Show
+                  </button>
+                </div>
+              </fieldset>
+
+              <div class="save-row">
+                <button id="save-button" class="save-button" type="submit" disabled>Save login</button>
+                <p id="dirty-note" class="dirty-note" aria-live="polite"></p>
+              </div>
+            </form>
+
+            <section class="summary" aria-labelledby="summary-title">
+              <div class="section-head">
+                <h2 id="summary-title" class="section-label">On the login page</h2>
+                <button type="button" class="text-button" data-goto="settings">Change</button>
+              </div>
+              <ul class="summary-list" id="summary-list"></ul>
+            </section>
+
+            <section class="local-data" aria-labelledby="local-data-title">
+              <div>
+                <h2 id="local-data-title">Local by design</h2>
+                <p id="storage-note">Your login and attendance stay in this browser profile. CAPTCHA is solved on-device.</p>
+              </div>
+              <button id="clear-login" class="clear-button" type="button">Clear login</button>
+            </section>
+          </section>
+
+          <section id="view-club" class="view club-view" role="tabpanel" aria-labelledby="tab-club" tabindex="-1" hidden></section>
+
+          <section id="view-theme" class="view themes" role="tabpanel" aria-labelledby="tab-theme" tabindex="-1" hidden>
+            <label class="switch-row theme-cuims">
+              <span>
+                <strong>Also restyle CUIMS pages</strong>
+                <small>Recolours the portal itself. Turn off if a page looks wrong.</small>
+              </span>
+              <input id="theme-cuims" type="checkbox" role="switch" data-key="themeCuims" checked />
+            </label>
+            <div class="theme-groups" id="theme-groups"></div>
+            <p class="theme-note">Changes the popup, LMS, CUIMS, and the toolbar icon. Themes from Omarchy.</p>
+          </section>
+
+          <section id="view-settings" class="view settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="-1" hidden>
+            <fieldset class="settings-group">
+              <legend>Login page</legend>
+              <label class="switch-row">
+                <span>
+                  <strong>Move past UID</strong>
+                  <small>Presses Next after filling your UID</small>
+                </span>
+                <input id="auto-advance" type="checkbox" role="switch" data-key="autoAdvanceUid" />
+              </label>
+
+              <label class="switch-row">
+                <span>
+                  <strong>Solve CAPTCHA automatically</strong>
+                  <small>Reads the code on-device, never sent anywhere</small>
+                </span>
+                <input id="auto-solve-captcha" type="checkbox" role="switch" data-key="autoSolveCaptcha" />
+              </label>
+
+              <label class="switch-row" id="auto-submit-row">
+                <span>
+                  <strong>Submit login automatically</strong>
+                  <small id="auto-submit-note">Presses Login for you, up to three tries</small>
+                </span>
+                <input id="auto-submit-login" type="checkbox" role="switch" data-key="autoSubmitLogin" aria-describedby="auto-submit-note" />
+              </label>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>Quiet mode</legend>
+              <label class="switch-row">
+                <span>
+                  <strong>Event interruptions</strong>
+                  <small>Hide promotional dialogs</small>
+                </span>
+                <input id="block-events" type="checkbox" role="switch" data-key="blockEvents" />
+              </label>
+
+              <label class="switch-row">
+                <span>
+                  <strong>Feedback interruptions</strong>
+                  <small>Hide survey and rating dialogs</small>
+                </span>
+                <input id="block-feedback" type="checkbox" role="switch" data-key="blockFeedback" />
+              </label>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>CUIMS pages</legend>
+              <label class="switch-row">
+                <span>
+                  <strong>Tidier pages</strong>
+                  <small>Pages show a second sooner; time table in order, upcoming exams, marks weighted like CU</small>
+                </span>
+                <input id="cuims-tidy" type="checkbox" role="switch" data-key="cuimsTidy" />
+              </label>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>Attendance</legend>
+              <label class="switch-row">
+                <span>
+                  <strong>Academic calendar</strong>
+                  <small>CU's holidays, test weeks and last day, so the forecast counts real class days</small>
+                </span>
+                <select id="academic-calendar" class="settings-select">
+                  <option value="auto">Automatic</option>
+                  <option value="cu">Most programs</option>
+                  <option value="uic">UIC (computing)</option>
+                  <option value="uid">UID (design)</option>
+                </select>
+              </label>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>LMS</legend>
+              <label class="switch-row">
+                <span>
+                  <strong>Clear course view</strong>
+                  <small>One row per subject, materials beside semester work</small>
+                </span>
+                <input id="lms-clear" type="checkbox" role="switch" data-key="lmsClear" />
+              </label>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>Updates</legend>
+              <div class="switch-row diag-row">
+                <span>
+                  <strong id="update-version">Version</strong>
+                  <small id="update-state">Not checked yet.</small>
+                </span>
+                <button id="update-check" class="clear-button" type="button" aria-describedby="update-state">Check now</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="settings-group">
+              <legend>Troubleshooting</legend>
+              <div class="switch-row diag-row">
+                <span>
+                  <strong>CUIMS request log</strong>
+                  <small id="diag-note">Times and page names only, kept on this device. Copy it when reporting a problem.</small>
+                </span>
+                <button id="copy-diagnostics" class="clear-button" type="button" aria-describedby="diag-note">Copy</button>
+              </div>
+            </fieldset>
+
+            <p class="settings-note">Each switch saves as you flip it. Open CUIMS and LMS tabs follow along.</p>
+
+            <p class="rate-line">
+              Finding CUIMS Clear useful?
+              <a class="rate-link" href="https://chromewebstore.google.com/detail/amlobigbjldbogimakmfndkdaekcdbkf/reviews" target="_blank" rel="noreferrer">Rate it on the <span class="rate-store">Chrome Web Store</span><span aria-hidden="true"> ↗</span></a>
+            </p>
+          </section>
+        </div>
+
+        <aside id="rate-nudge" class="rate-nudge" aria-label="Rate CUIMS Clear" hidden>
+          <div class="rate-ask">
+            <p class="rate-long">Saving you some clicks? A rating helps other students find CUIMS Clear.</p>
+            <div class="rate-actions">
+              <span class="rate-short">Enjoying it?</span>
+              <a class="rate-link rate-cta" href="https://chromewebstore.google.com/detail/amlobigbjldbogimakmfndkdaekcdbkf/reviews" target="_blank" rel="noreferrer">Rate it<span aria-hidden="true">↗</span></a>
+              <button type="button" class="text-button" data-rate="rated">Already rated</button>
+              <button type="button" class="rate-dismiss" data-rate="snooze" aria-label="Not now">×</button>
+            </div>
+          </div>
+          <div class="rate-confirm" hidden>
+            <div class="rate-actions">
+              <span class="rate-short">Did you leave a rating?</span>
+              <button type="button" class="rate-cta" data-rate="rated">Yes, I rated it</button>
+              <button type="button" class="text-button" data-rate="not-yet">Not yet</button>
+            </div>
+          </div>
+          <span class="rate-timer" aria-hidden="true"></span>
+        </aside>
+
+        <p id="status" class="toast" role="status" aria-live="polite"></p>
+      </main>
+    </div>
+    <script src="academic-calendar.js"></script>
+    <script src="attendance-model.js"></script>
+    <script src="attendance-view.js"></script>
+    <script src="marks-model.js"></script>
+    <script src="marks-view.js"></script>
+    <script src="forecast-model.js"></script>
+    <script src="forecast-view.js"></script>
+    <script src="captcha-glyphs.js"></script>
+    <script src="ledger.js"></script>
+    <script src="proxy-run.js"></script>
+    <script src="calendar-export.js"></script>
+    <script src="wrapped.js"></script>
+    <script src="celebrate.js"></script>
+    <script src="rate-nudge.js"></script>
+    <script src="update-check.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

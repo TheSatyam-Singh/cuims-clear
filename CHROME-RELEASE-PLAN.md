@@ -1,0 +1,52 @@
+# Chrome Web Store release
+
+## Goal
+Publish the Chrome MV3 build (0.6.2) through arshgill6120@gmail.com.
+
+## Plan
+- [x] Inspect package, privacy documentation, tests, and developer dashboard.
+- [x] Replace unsupported manifest SVG icons with PNG exports of the existing mark.
+- [x] Run existing tests and validate package references; create release ZIP.
+- [x] Prepare accurate listing copy, privacy disclosures, and required images.
+- [x] Upload and complete the store listing, then submit for review and verify status.
+
+## Constraints and findings
+No PLANS.md or repository AGENTS.md exists. Follow user-provided AGENTS.md.
+Preserve the existing feature scope and untracked work/lms-design-pitches.html.
+Dashboard has no items and is signed into the requested developer account in Firefox.
+Publishing requires Google review; submission is not a claim that the listing is live.
+
+## Validation and progress
+`node --test tests/*.test.mjs`: 65 passed, 0 failed. Python manifest-reference and ZIP integrity checks passed (16 references). User uploaded ZIP successfully. Store item ID: amlobigbjldbogimakmfndkdaekcdbkf. Description, Education category, English, homepage and support URLs saved.
+
+## Submission blockers discovered
+Google's current user-data FAQ requires strong encryption for data at rest. Existing Chrome build stores the CUIMS password unencrypted. Asked user to choose Chrome password-manager filling (recommended) or a passphrase-protected vault before release. Do not certify policy compliance or submit this build until resolved.
+Privacy draft saved with single purpose, permission explanations, no remote code, existing public privacy URL, and local PII/authentication/website-content handling declared.
+Dashboard also requires a screenshot, store icon, three policy certifications, and a verified publisher contact email. Promo tile should be supplied per image guidance.
+
+## Approved password-manager change
+User chose Chrome password manager. Chrome 0.6.2 removes UID/password storage and popup fields, preserves portal autofill, clears old credentials on install/update, and keeps browser-specific content/popup files out of Firefox sync. Add regression coverage for delayed autofill and credential migration before repackaging. User reports contact email verified.
+
+## Final preparation
+Chrome 0.6.2 ZIP uploaded successfully. 69 tests passed with `node --test tests/*.test.mjs`; `git diff --check` passed. Manifest references and ZIP integrity passed. Public privacy policy updated in commit e2580b6 (pushed to main and HTTP 200 verified). Contact email confirmed verified in dashboard. Existing logo, 1280x800 screenshot, 440x280 promo tile, listing copy, and reviewer instructions saved. No university credentials shared.
+
+## Submission result
+21 September 2026: Google displayed “Your extension was submitted for review” and “Item submitted.” Automatic publication after approval is enabled. Distribution is free, public, all regions. Store ID: amlobigbjldbogimakmfndkdaekcdbkf. Not yet live; Google review remains external.
+
+Release ZIP SHA-256: bbcb4de5493e1bf9761e0386b25aea78902f5c5fa70102bbb69aeab21cb3262c.
+Validation limits: regression suite and rendered popup checked; Chrome password-manager filling against a live university login was not exercised during this release. Reviewer access may require follow-up because no university test account is available.
+
+## 0.6.3 restoration — 22 September 2026
+User reports published 0.6.2 password-manager/CAPTCHA flow does not match intended behavior and explicitly requests the pre-session version and a published update explaining the restoration.
+
+Scope: restore content.js, popup.js, popup.css, popup.html, service-worker.js and sync script from 5bcede2. Keep store-compatible PNG icons and increase version to 0.6.3. Restore accurate local credential-storage disclosures; do not claim encryption or conceal the change. Replace tests for superseded behavior with saved-login regression coverage. Update listing screenshot, release notes and reviewer instructions. Submit update and verify review status.
+
+- [x] Restore and validate original behavior against 5bcede2.
+- [x] Update release package, privacy documentation, listing text and screenshot.
+- [ ] Upload 0.6.3, submit review with automatic publication, verify confirmation.
+
+This is an explicit rollback, not an investigation claiming to reproduce the user's live login issue. Baseline equivalence and executable saved-login tests are the validation signals. Live CAPTCHA/login verification remains separate.
+
+0.6.3 validation: `node --test tests/*.test.mjs` passed 69/69; `git diff --check` passed. Runtime baseline byte-equivalence (popup version excepted), manifest file references and ZIP integrity passed. Rendered 1280×800 screenshot checked. ZIP SHA-256: 25b3710358fff0c3699c80e7924cf0d1a96c90e45d9d97820f54870a3445e01d.
+
+Upload blocked: Firefox opened the Select file flow, then native computer-use calls repeatedly failed with ScreenCaptureKit SCStreamErrorDomain -3812 (invalid parameter), including reconnect and Escape recovery. 0.6.3 is not confirmed uploaded or submitted. Code/privacy/assets committed and pushed as da246d8. Resume at Package → Upload new package, then update listing, screenshot, privacy permission explanations and reviewer instructions before submission.

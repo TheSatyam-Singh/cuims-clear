@@ -1,0 +1,472 @@
+/* ---- Founding 100 on CUIMS ----
+   The receipt, letterpress and notebook of founders.css, on the portal.
+   cuims-theme.js sets html:is([data-cc-signature="founders"], [data-cc-signature="black"]) only while that
+   theme restyles CUIMS, so every other theme (and the switch off) is
+   untouched. Our own components get the full treatment; CUIMS's pages get
+   the paper, the serif titles and Courier table heads. */
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) {
+  --f-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --f-mono: "Courier New", Courier, "Nimbus Mono PS", monospace;
+  --f-red: #b4322a;
+  --f-foil: linear-gradient(100deg, #5e420c 0%, #8f6a1b 24%, #a17a22 38%, #7d5a14 56%, #9c721c 74%, #5e420c 100%);
+  --f-mark: rgb(240 199 94 / 55%);
+  --f-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32  0 0 0 0 .26  0 0 0 0 .16  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --f-ink-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+  --f-torn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='10' preserveAspectRatio='none'%3E%3Cpath d='M0 0H24V4L22 7L19 4L16 8L13 5L10 9L7 5L4 8L1 5L0 6Z'/%3E%3C/svg%3E");
+}
+
+/* The whole portal on receipt paper. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  background-image: var(--f-grain);
+  mix-blend-mode: multiply;
+}
+
+/* CUIMS's own page titles and table heads. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper .form_header,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper h1,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper h2.page-title {
+  font-family: var(--f-serif) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper .form_header {
+  font-size: 27px !important;
+  border-bottom: 2px dashed var(--cc-line) !important;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper table.table th {
+  font-family: var(--f-mono) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+}
+
+/* ---- our components ---- */
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) [data-cc-own] {
+  --o-display: var(--f-serif);
+}
+
+/* Titles in the book serif. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-title,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-name,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-week-title b,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-head b,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject-name b,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-notes dd b {
+  font-family: var(--f-serif);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-title {
+  font-size: 31px;
+}
+
+/* Labels, times and counts in receipt print. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-label,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-clock-label,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-meta b,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-stop-time,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-stop-gap span,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-grid thead th,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-start,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-end,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class-room,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class-kind,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-week-title span,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-count,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-day,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-month,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-run-head,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-label,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-notes dt,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject-name span,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-score,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-action {
+  font-family: var(--f-mono);
+  font-weight: 700;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-action {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: inset 0 -2px 0 rgb(0 0 0 / 14%), inset 0 1px 0 rgb(255 255 255 / 45%);
+}
+
+/* Gold foil on the figures that matter. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-clock b,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-exam.is-lead .cc-ds-date,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-big b {
+  font-family: var(--f-serif);
+  color: transparent;
+  background: var(--f-foil);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* The hero is a receipt slip: paper, square corners, a torn bottom edge,
+   a strip of tape in the subject's colour holding it on. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-hero {
+  border-radius: 3px 3px 0 0;
+  background: var(--o-surface);
+  box-shadow: inset 0 0 0 1px var(--o-line);
+  padding-bottom: 28px;
+  -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 9px) no-repeat, var(--f-torn) bottom / 24px 10px repeat-x;
+  mask: linear-gradient(#000, #000) top / 100% calc(100% - 9px) no-repeat, var(--f-torn) bottom / 24px 10px repeat-x;
+  overflow: visible;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 120px;
+  width: 92px;
+  height: 18px;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--cc-hue, #e2b84b) 46%, transparent) 0 7px, color-mix(in srgb, var(--cc-hue, #e2b84b) 32%, transparent) 7px 14px);
+  transform: rotate(-2.5deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-label {
+  color: var(--f-red);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-dot {
+  background: var(--f-red);
+}
+
+/* Highlighter over the room you are heading to. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-hero-meta b {
+  padding: 0 3px;
+  background: linear-gradient(transparent 50%, var(--f-mark) 50%, var(--f-mark) 92%, transparent 92%);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-line,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-week-head {
+  border-top-style: dashed;
+  border-bottom-style: dashed;
+  border-width: 2px;
+}
+
+/* Stops are punched holes on the line. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-stop-dot {
+  border-width: 2px;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 22%);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-stop.is-now .cc-stop-dot {
+  background: var(--f-red);
+  border-color: var(--f-red);
+  box-shadow: 0 0 0 4px rgb(180 50 42 / 18%);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-stop.is-next .cc-stop-name {
+  background: linear-gradient(transparent 50%, var(--f-mark) 50%, var(--f-mark) 92%, transparent 92%);
+}
+
+/* The week: paper cards with a strip of tape in the subject's colour. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-week {
+  border-radius: 3px;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-tt-grid thead th.is-today .cc-tt-date {
+  color: var(--f-red);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.6px var(--f-red);
+  transform: rotate(-6deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class {
+  margin-top: 6px;
+  border-radius: 2px;
+  background: var(--o-surface);
+  box-shadow: 0 1px 0 var(--o-line), 0 0 0 1px var(--o-line);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 10px;
+  width: 46px;
+  height: 12px;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--cc-hue) 55%, transparent) 0 5px, color-mix(in srgb, var(--cc-hue) 38%, transparent) 5px 10px);
+  transform: rotate(-3deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class:nth-of-type(even)::before {
+  left: auto;
+  right: 12px;
+  transform: rotate(2.5deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class-title {
+  font-family: var(--f-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+/* "Now" is stamped on. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class-now {
+  color: var(--f-red);
+  background: transparent;
+  border: 1.5px solid var(--f-red);
+  border-radius: 3px;
+  font-family: var(--f-mono);
+  transform: rotate(-4deg);
+  -webkit-mask: var(--f-ink-edge);
+  mask: var(--f-ink-edge);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-class.is-now {
+  box-shadow: 0 0 0 1.5px var(--f-red), 0 3px 0 rgb(180 50 42 / 12%);
+}
+
+/* ---- Datesheet ---- */
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-exam {
+  border-radius: 3px;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-when {
+  border-radius: 0 3px 3px 0;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-date {
+  font-family: var(--f-serif);
+}
+
+/* Today and tomorrow are stamped on. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-exam.is-soon .cc-ds-count {
+  justify-self: start;
+  padding: 2px 6px 1px;
+  border: 1.5px solid var(--f-red);
+  border-radius: 3px;
+  color: var(--f-red);
+  transform: rotate(-2.5deg);
+  -webkit-mask: var(--f-ink-edge);
+  mask: var(--f-ink-edge);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-exam.is-lead {
+  overflow: visible;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-exam.is-lead::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 30%;
+  width: 84px;
+  height: 16px;
+  background: repeating-linear-gradient(45deg, rgb(226 184 75 / 50%) 0 7px, rgb(226 184 75 / 34%) 7px 14px);
+  transform: rotate(-2deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-run,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-hero,
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject {
+  border-radius: 3px;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-run-list b {
+  font-family: var(--f-serif);
+  font-size: 13px;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .is-done > .cc-ds-run-dot {
+  border-color: var(--f-red);
+  background: var(--f-red);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-ds-run-list li.is-done::before {
+  background: var(--f-red);
+}
+
+/* ---- Marks ---- */
+
+@media (min-width: 761px) {
+  html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-notes > div {
+    border-left-style: dashed;
+    border-left-width: 2px;
+  }
+}
+
+@media (max-width: 760px) {
+  html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-notes > div {
+    border-top-style: dashed;
+  }
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-meter i {
+  background: var(--f-red);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject-pct {
+  font-family: var(--f-serif);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject {
+  position: relative;
+  overflow: visible;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 14px;
+  width: 40px;
+  height: 11px;
+  background: repeating-linear-gradient(45deg, rgb(226 184 75 / 50%) 0 5px, rgb(226 184 75 / 34%) 5px 10px);
+  transform: rotate(-3deg);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject:nth-child(even)::before {
+  left: auto;
+  right: 16px;
+  transform: rotate(2.5deg);
+}
+
+/* A subject below the line gets the highlighter. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-mk-subject[data-band="low"] .cc-mk-subject-name b {
+  align-self: start;
+  padding: 0 2px;
+  background: linear-gradient(transparent 50%, var(--f-mark) 50%, var(--f-mark) 92%, transparent 92%);
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #accordion > h3.ui-accordion-header {
+  font-family: var(--f-serif) !important;
+  font-weight: 700 !important;
+  border-radius: 3px !important;
+}
+
+/* Each subject's total is stamped on its header. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .cc-score {
+  border: 1.5px solid currentColor !important;
+  border-radius: 3px;
+  background: transparent !important;
+  transform: rotate(-2deg);
+  -webkit-mask: var(--f-ink-edge);
+  mask: var(--f-ink-edge);
+}
+
+/* ---- the portal around them ---- */
+
+/* Where you are, in the sidebar: highlighted, as in a notebook. */
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) #menu-content a.cc-here {
+  background: linear-gradient(transparent 55%, var(--f-mark) 55%, var(--f-mark) 90%, transparent 90%) !important;
+}
+
+html:is([data-cc-signature="founders"], [data-cc-signature="black"]) .inner-wrapper #short_links .shortLinks__item > a h6 {
+  font-family: var(--f-mono) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+}
+
+/* ---- Black Card on CUIMS ---- */
+
+html[data-cc-signature="black"] {
+  --f-red: #e8664f;
+  --f-foil: linear-gradient(100deg, #b98c2e 0%, #f1d27c 28%, #c99a3a 50%, #f3d98a 72%, #b48628 100%);
+  --f-mark: rgb(217 178 90 / 26%);
+  --f-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95  0 0 0 0 .9  0 0 0 0 .8  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --f-crop: linear-gradient(currentColor, currentColor) left top / 12px 1px, linear-gradient(currentColor, currentColor) left top / 1px 12px,
+    linear-gradient(currentColor, currentColor) right top / 12px 1px, linear-gradient(currentColor, currentColor) right top / 1px 12px,
+    linear-gradient(currentColor, currentColor) left bottom / 12px 1px, linear-gradient(currentColor, currentColor) left bottom / 1px 12px,
+    linear-gradient(currentColor, currentColor) right bottom / 12px 1px, linear-gradient(currentColor, currentColor) right bottom / 1px 12px;
+}
+
+html[data-cc-signature="black"] body::after {
+  mix-blend-mode: screen;
+}
+
+/* Cards are linework on the card stock, crop marks at the corners. */
+html[data-cc-signature="black"] :is(.cc-tt-hero, .cc-tt-week, .cc-ds-run, .cc-mk-hero, .cc-mk-subject, .cc-class) {
+  background: transparent;
+}
+
+html[data-cc-signature="black"] :is(.cc-tt-week, .cc-ds-run, .cc-mk-hero) {
+  position: relative;
+  overflow: visible;
+  box-shadow: inset 0 0 0 1px rgb(239 230 210 / 24%);
+}
+
+html[data-cc-signature="black"] :is(.cc-tt-week, .cc-ds-run, .cc-mk-hero)::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  color: rgb(239 230 210 / 42%);
+  background: var(--f-crop);
+  background-repeat: no-repeat;
+}
+
+html[data-cc-signature="black"] .cc-tt-week {
+  overflow: visible;
+}
+
+html[data-cc-signature="black"] .cc-tt-scroll {
+  border-radius: 3px;
+}
+
+html[data-cc-signature="black"] .cc-tt-hero {
+  box-shadow: inset 0 0 0 1px rgb(239 230 210 / 24%);
+}
+
+html[data-cc-signature="black"] .cc-class {
+  box-shadow: 0 0 0 1px rgb(239 230 210 / 16%);
+}
+
+html[data-cc-signature="black"] .cc-ds-exam {
+  --edge: rgb(239 230 210 / 24%);
+  background: transparent;
+}
+
+html[data-cc-signature="black"] .cc-ds-exam.is-lead {
+  --edge: rgb(226 189 98 / 55%);
+  background: linear-gradient(100deg, rgb(217 178 90 / 14%) 0%, transparent 70%);
+}
+
+html[data-cc-signature="black"] .cc-ds-when {
+  background: rgb(239 230 210 / 5%);
+}
+
+html[data-cc-signature="black"] .cc-ds-exam.is-lead .cc-ds-when {
+  background: rgb(217 178 90 / 16%);
+}
+
+html[data-cc-signature="black"] :is(.cc-ds-exam.is-lead::before, .cc-mk-subject::before) {
+  background: repeating-linear-gradient(45deg, rgb(226 189 98 / 40%) 0 6px, rgb(226 189 98 / 26%) 6px 12px);
+}
+
+html[data-cc-signature="black"] .cc-class::before {
+  opacity: 0.85;
+}
+
+/* On black, a mid-height highlighter reads as a strike: it sits low, as a marker underline. */
+html[data-cc-signature="black"] :is(.cc-hero-meta b, .cc-stop.is-next .cc-stop-name, .cc-mk-subject[data-band="low"] .cc-mk-subject-name b, #menu-content a.cc-here) {
+  background: linear-gradient(transparent 74%, rgb(226 189 98 / 45%) 74%, rgb(226 189 98 / 45%) 96%, transparent 96%) !important;
+}
+
+/* The next exam's stamp and stub stay readable on the gold wash. */
+html[data-cc-signature="black"] .cc-ds-exam.is-lead .cc-ds-when {
+  background: rgb(217 178 90 / 10%);
+}
+
+html[data-cc-signature="black"] .cc-ds-exam.is-lead :is(.cc-ds-day, .cc-ds-month) {
+  color: var(--o-ink);
+}
+
+html[data-cc-signature="black"] .cc-ds-exam.is-soon .cc-ds-count {
+  color: #f4907b;
+  border-color: #f4907b;
+}

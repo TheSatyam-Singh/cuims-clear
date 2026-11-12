@@ -1,0 +1,172 @@
+// Clicks CUIMS's own CU LMS control. Intent lives only in this tab's
+// sessionStorage, set by the #cuims-clear-lms link, so no other CUIMS visit
+// can turn into an LMS launch. It survives the login pages in the same tab,
+// and it is spent after one handoff attempt.
+(() => {
+  if (window.top !== window) return;
+  const SESSION = "cuims-clear:lms-launch";
+  const ATTEMPT = "cuims-clear:lms-attempt";
+  const TTL = 10 * 60 * 1000;
+  const COVER_ID = "cuims-clear-lms-cover";
+  const COVER_MAX_MS = 12_000;
+  let inflight = false;
+
+  // While the dashboard hands off to LMS, show the LMS loading colour instead
+  // of CUIMS. Only the dashboard is covered; a login form must stay visible.
+  function cover() {
+    if (!/\/StudentHome\.aspx$/i.test(location.pathname) || document.getElementById(COVER_ID)) return;
+    const style = document.createElement("style");
+    style.id = COVER_ID;
+    // The chosen theme's page colour, so the hand-off matches the LMS it opens.
+    const theme = globalThis.CuimsThemes;
+    const id = theme?.mirrored();
+    const tokens = id && id !== theme.DEFAULT ? theme.tokens(id) : null;
+    const bg = tokens ? tokens.canvas : "oklch(0.97 0.004 125)";
+    const fg = tokens ? tokens.muted : "oklch(0.46 0.014 125)";
+    style.textContent = `html{background:${bg}!important}
+html body{visibility:hidden!important}
+html::after{content:"Opening LMS…";position:fixed;inset:0;display:grid;place-items:center;visibility:visible;color:${fg};font:600 13px/1.4 "Avenir Next",Avenir,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.01em}`;
+    document.documentElement.append(style);
+    setTimeout(uncover, COVER_MAX_MS);
+  }
+
+  function uncover() {
+    document.getElementById(COVER_ID)?.remove();
+  }
+
+  function fresh(value) {
+    const at = Number(value);
+    return Boolean(at && Date.now() - at <= TTL);
+  }
+
+  function clearIntent() {
+    sessionStorage.removeItem(SESSION);
+    sessionStorage.removeItem(ATTEMPT);
+  }
+
+  function lmsUrl(value) {
+    try {
+      const url = new URL(String(value || ""), location.href);
+      if (url.origin !== "https://lms.cuchd.in" || url.pathname === "/" || url.username || url.password) return null;
+      return url.href;
+    } catch {
+      return null;
+    }
+  }
+
+  function follow(url) {
+    const href = lmsUrl(url);
+    if (!href) return false;
+    clearIntent();
+    location.assign(href);
+    return true;
+  }
+
+  function label(el) {
+    return `${el.textContent || ""} ${el.value || ""} ${el.getAttribute?.("title") || ""} ${el.getAttribute?.("aria-label") || ""}`;
+  }
+
+  function ssoLink() {
+    const named = document.querySelector('[id$="lbtnLMSSSO"], [id*="LMSSSO"], [id*="lbtnLMS"]');
+    if (named) return named;
+    try {
+      return [...document.querySelectorAll("a, button, input[type='submit'], [onclick], [href*='doPostBack']")].find((el) =>
+        /cu\s*lms/i.test(label(el))
+      ) || [...document.querySelectorAll("a, button, [onclick]")].find((el) => {
+        if (!/click\s*here/i.test(label(el))) return false;
+        for (let node = el, i = 0; node && i < 6; i++, node = node.parentElement) {
+          if (/cu\s*lms/i.test(node.textContent || "")) return true;
+        }
+        return false;
+      }) || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function waitForLink(timeout = 15000) {
+    return new Promise((resolve) => {
+      const start = Date.now();
+      const tick = () => {
+        const link = ssoLink();
+        if (link) return resolve(link);
+        if (Date.now() - start >= timeout) return resolve(null);
+        setTimeout(tick, 50);
+      };
+      tick();
+    });
+  }
+
+  function activate(link) {
+    const href = link.getAttribute?.("href") || link.href || "";
+    if (follow(href)) return;
+    const target = (link.matches?.("a, button, input") ? link : link.querySelector?.("a, button, input")) || link;
+    try { target.setAttribute("data-cc-lms-sso", "1"); } catch {}
+    try {
+      sessionStorage.removeItem("cuims-clear:lms-activated");
+      window.dispatchEvent(new CustomEvent("cuims-clear:lms-activate"));
+    } catch {}
+    if (sessionStorage.getItem("cuims-clear:lms-activated") === "1") return;
+    target.click();
+  }
+
+  function hasIntent() {
+    return fresh(sessionStorage.getItem(SESSION));
+  }
+
+  function needsUi() {
+    try { chrome.runtime.sendMessage({ type: "cuims-clear:lms-needs-ui" }); } catch {}
+  }
+
+  async function launch() {
+    if (inflight) return;
+    inflight = true;
+    try {
+      if (!hasIntent()) {
+        uncover();
+        return;
+      }
+      // The handoff already ran once in this tab and CUIMS did not send it to
+      // LMS. Stop here rather than loop.
+      if (sessionStorage.getItem(ATTEMPT)) {
+        clearIntent();
+        uncover();
+        return;
+      }
+      if (document.querySelector("#txtUserId, #txtPassword, #captchaCode, #btnNext, #btnLogin")) {
+        uncover();
+        setTimeout(() => {
+          if (document.querySelector("#txtUserId, #txtPassword, #captchaCode")) needsUi();
+        }, 8000);
+        return;
+      }
+      const link = await waitForLink();
+      if (!link) {
+        uncover();
+        return;
+      }
+      sessionStorage.setItem(ATTEMPT, "1");
+      activate(link);
+    } finally {
+      inflight = false;
+    }
+  }
+
+  if (location.hash === "#cuims-clear-lms") {
+    sessionStorage.setItem(SESSION, String(Date.now()));
+    sessionStorage.removeItem(ATTEMPT);
+    try { history.replaceState(null, "", location.pathname + location.search); } catch {}
+  }
+  if (fresh(sessionStorage.getItem(SESSION))) cover();
+
+  try {
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (message?.type !== "cuims-clear:launch-lms") return;
+      sendResponse({ ok: true });
+      launch();
+    });
+  } catch {}
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", launch, { once: true });
+  else launch();
+})();

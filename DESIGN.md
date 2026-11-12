@@ -1,0 +1,67 @@
+# CUIMS Clear Design System
+
+## 1. Creative North Star
+
+**The Student Shortcut.** CUIMS Clear should feel like a tool a sharp student made for
+other students: immediate, inspectable, and quietly defiant. The interface is a compact
+control surface, not a university portal or a startup dashboard. Its visual signature is
+graphite type on neutral paper with one high-energy acid-lime accent.
+
+## 2. Product Scene
+
+A student opens the extension between classes or from a hostel desk, often in a hurry and
+on an ordinary laptop display. They need to confirm that their login is saved, silence the
+two known interruption categories, and enter CUIMS or the LMS in a few seconds. The popup
+must remain legible at a glance and trustworthy around credentials. On LMS pages the same
+graphite and lime system is applied as a light skin: a courses directory that pairs syllabus
+materials with semester work, and a thin toolbar with an original-view escape. Native
+activities, submissions, notifications, and account controls stay in place.
+
+## 3. UX Architecture
+
+The popup has four zones in one continuous surface: identity, destinations,
+saved-login fields, and automation/privacy. “Open CUIMS” and “Open LMS” sit
+directly under the header so they are reachable without scrolling. “Open CUIMS”
+is the primary action. “Open LMS” is the secondary action and uses the
+university’s own signed-in launch path.
+Saving settings is explicit. Credential deletion stays visible and local. Controls use
+native semantics and keyboard behavior; state is never conveyed through color alone.
+
+## 4. Visual System
+
+- Canvas: `#f2f3ee`; surface: `#ffffff`; ink: `#181a17`; muted ink: `#63685f`.
+- Borders: `#d6dad1`; strong borders: `#aeb4aa`.
+- Accent: `#b7f34a` with `#18200d` text; focus: `#527f17`; success: `#28633a`.
+- Type: Avenir Next when available, then Avenir, Inter, system sans-serif.
+- Radius: 8px for controls and 10px for the mark; no decorative shadows or gradients.
+- Spacing: 4px base rhythm with 12px, 16px, 20px, and 24px as primary intervals.
+- Motion: only short state feedback; remove it when reduced motion is requested.
+
+## 5. Component Language
+
+The identity mark is a black square cut by two lime forward slashes: progress without
+institutional branding. Inputs are white with crisp one-pixel borders. Full-row native
+checkboxes form two small setting groups: login and quiet mode. Primary actions are lime
+with dark text; secondary actions are white or graphite. Privacy text is compact but never
+hidden. Destructive local-data removal is a plain, clearly labelled text action.
+
+## 6. Accessibility & Content
+
+Target WCAG AA contrast, visible `:focus-visible` rings, 44px primary targets, and logical
+tab order. Labels remain visible above fields. Password visibility has an accessible name
+that updates with state. Status messages use a polite live region. Copy is short, direct,
+and peer-built: no hype, no university voice, and no claim that CAPTCHA is bypassed.
+
+## 7. Forecast
+
+The Forecast tab is the one place the popup gets expressive. Its hero card is
+drawn like the identity mark: the theme's brand graphite with its brand ink
+(`--hero-*` tokens, contrast-checked per theme in `themes.js`), the two slashes
+faint behind the figure. Everything below it is an ordinary card. Charts are
+inline SVG with thin marks: a solid line for what happened, a dashed line for
+the forecast inside a pale likely-range band, a dotted attend-everything line,
+and a dashed goal line. Numbers that answer the question ("≈89.0%", "93%",
+"8") are large; the words around them are small and plain. A chance is never
+shown as certain: it is rounded to 5 and capped at "over 95%" and "under 5%".
+Every skip verdict carries a word, not only a colour: Can skip, Can make up,
+Attend, Too many.
